@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+
+  postgresdb:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: vamshi
+    volumes:
+      - type: bind
+        source: /home/vamshi/development/docker-volume/postgres-container-data
+        target: /var/lib/postgresql/data
+
+
+  goldspacesvc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    depends_on:
+      - postgresdb
+
+
