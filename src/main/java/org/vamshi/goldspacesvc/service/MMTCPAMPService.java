@@ -1,8 +1,10 @@
-package org.vamshi.goldspacesvc.rest.client;
+package org.vamshi.goldspacesvc.service;
 
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.vamshi.goldspacesvc.models.GoldPrice;
 
 import java.math.BigInteger;
@@ -14,14 +16,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @CommonsLog
-public class MMTCPAMPClient {
+@Service
+public class MMTCPAMPService {
 
+    @Value("${mmtc.pamp.url}")
+    private String mmtcpampurl;
 
-    public static GoldPrice getPrice() {
+    public GoldPrice getPrice() {
         GoldPrice goldPrice = new GoldPrice();
 
         try {
-            URL url = new URL("https://distributors.mmtcpamp.com/Downloads/PriceList.pdf");
+            URL url = new URL(mmtcpampurl);
 
             try (PDDocument doc = PDDocument.load(url.openStream())) {
                 PDFTextStripper stripper = new PDFTextStripper();

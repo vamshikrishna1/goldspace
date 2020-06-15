@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "gold_price")
 @Data
-public class GoldPrice {
+public class GoldPrice{
 
     @Id
     @Column(name = "price_id")

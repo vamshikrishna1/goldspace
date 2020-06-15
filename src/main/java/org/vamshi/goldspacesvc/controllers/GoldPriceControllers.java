@@ -1,22 +1,42 @@
 package org.vamshi.goldspacesvc.controllers;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.vamshi.goldspacesvc.rest.client.MMTCPAMPClient;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.web.bind.annotation.*;
+import org.vamshi.goldspacesvc.respositories.GoldPriceRepository;
 import org.vamshi.goldspacesvc.service.GoldPriceService;
+import org.vamshi.goldspacesvc.service.MMTCPAMPService;
+
+import java.math.BigInteger;
+import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/goldPrices")
+@RequestMapping("/api/goldPrices")
 public class GoldPriceControllers {
 
     @Autowired
     GoldPriceService goldPriceService;
 
-    @PutMapping("/mmtc-pamp")
-    public void resgiterEntityFromMMTC() {
-        goldPriceService.registerGoldPrice(MMTCPAMPClient.getPrice());
+    @Autowired
+    MMTCPAMPService mmtcpampService;
+
+    @Autowired
+    GoldPriceRepository goldPriceRepository;
+
+    ApplicationContext applicationContext;
+
+    @PostMapping
+    @RequestMapping("/mmtc-pamp")
+    public void resgiter() {
+        goldPriceService.registerGoldPrice(mmtcpampService.getPrice());
+    }
+
+    @GetMapping
+    @RequestMapping("min-price")
+    public BigInteger getMinimumPrice(@RequestParam("fromDate") String fromdate) {
+        return goldPriceRepository.getMinimumPrice(LocalDate.parse(fromdate));
     }
 
 }
